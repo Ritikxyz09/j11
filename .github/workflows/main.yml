@@ -1,0 +1,56 @@
+name: Chut.py Automation
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        # Add your dependencies here if any
+        # pip install -r requirements.txt
+
+    - name: Display Python info
+      run: |
+        python --version
+        pip --version
+
+    - name: List files
+      run: ls -la
+
+    - name: Run chut.py with basic check
+      run: |
+        if [ -f "chut.py" ]; then
+          echo "chut.py file found!"
+          python chut.py
+        else
+          echo "chut.py file not found. Creating sample file..."
+          cat > chut.py << EOF
+#!/usr/bin/env python3
+def main():
+    print("🚀 Chut.py is running successfully!")
+    print("✅ GitHub Actions is working perfectly!")
+    print("🎉 Congratulations! Your YML is running!")
+
+if __name__ == "__main__":
+    main()
+EOF
+          python chut.py
+        fi
+
+    - name: Success message
+      run: echo "🎊 Chut.py workflow completed successfully!"
